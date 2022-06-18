@@ -1,22 +1,25 @@
 public class Main {
     public static void main(String[] args) {
         testPartA();
-        testPartB();
+        //testPartB();
     }
 
     private static void testPartA() {
         System.out.println("Testing part A...");
         testPartA1();
-        testPartA2();
+        //testPartA2();
     }
+
 
     private static void testPartA1() {
         System.out.println("Testing part A1...");
         Date[] dates = {new Date(16, 6, 2022), new Date(1, 1, 10), new Date(5, 5, 555)};
         int[] nums = {0, 1, -1, 100, -200, -12350, 21030};
 
+
         for (Date date : dates) {
             for (int num : nums) {
+                if(num == -12350){}
                 testAddToDate(date, num);
             }
         }
@@ -32,7 +35,7 @@ public class Main {
             System.out.println("Subtracting " + -num + " from " + date + " result: " + result);
         }
     }
-
+/*
     private static void testPartA2() {
         System.out.println("Testing part A2...");
         BinNode<Integer> root = new BinNode<>(5);
@@ -157,4 +160,6 @@ class TryWithResourcesAcquireWorker extends Worker {
             }
         }
     }
+    */
+
 }

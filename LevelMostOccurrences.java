@@ -12,27 +12,13 @@ public class LevelMostOccurrences {
 
     public static int getLevelWithMostOccurrences(BinNode<Integer> node, int num) {
 
-
-//        //updating that the level exist in the relevant queue
-//        Iterator flags_iter = stop_flags_arr.iterator();
-//
-//
-//        for (int flag_to_change = 1; flag_to_change < level; flag_to_change++) {
-//
-//            if (!flags_iter.hasNext())
-//            {
-//                stop_flags_arr.add(new BinNode<>(0, null, null));
-//            }
-//        }
-//        BinNode o = (BinNode) flags_iter.next();
-//        o.setData((int) 1);
-        if (level == 1) {
+        if (level == 1) { //setting up the counter array and adding an element for the 1'st level
             counter_arr = new ArrayDeque<BinNode<Integer>>();
             counter_arr.add(new BinNode<>(0));
         }
-        BinNode<Integer> o = new BinNode<>(0);
+        BinNode<Integer> o = new BinNode<>(0); // temp BinNode for future uses
         //if the data is num updating the counter array
-        if (node.getData() == num) {
+        if (node.getData() == num) { // needing to update the counter array
             Iterator counter_iter = counter_arr.iterator();
 
 
@@ -49,11 +35,12 @@ public class LevelMostOccurrences {
 
         int right_result;
         int left_result;
+        //checking if there's another level in the tree, if there's adding element to the counter array
         if((node.getRight() != null) || (node.getLeft() != null)) counter_arr.add(new BinNode<>(0));
-        if (node.getRight() != null) {
-            level++;
+        if (node.getRight() != null) {//checking if to enter recursion on each branch.
+            level++;//we need to increase the level for the new recursion, it will be on higher level.
             right_result = getLevelWithMostOccurrences(node.getRight(), num);
-            level--;
+            level--;//we need to decrease the level after we finished, so it will match the current.
         }
 
         if (node.getLeft() != null) {
@@ -64,6 +51,7 @@ public class LevelMostOccurrences {
 
 
         //the recursion stops here. let's find maximum and wrap it up.
+        //the recursion on the branch won't return something meaningful, it's only so the counter array will be updated
         int max_index = 0;
         int max_times = 0;
         int cur_index = 1;

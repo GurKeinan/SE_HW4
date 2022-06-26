@@ -5,48 +5,66 @@ import java.lang.Thread;
 public class MyReentrantLock implements Lock, AutoCloseable{
 
     AtomicBoolean isLocked;
-    long pid;
-    AtomicBoolean isAddingThread;
-    ArrayList<Long> arr;
+    int numOflocks;
 
-    public MyReentrantLock(){
+    Thread ownerOfLock;
+
+
+    public MyReentrantLock()
+    {
         this.isLocked  = new AtomicBoolean();
-        this.isAddingThread = new AtomicBoolean();
-        ArrayList<Long> arr = new ArrayList<Long>();
-        pid = -1;
+        numOflocks = 0;
+        ownerOfLock = null;
     }
 
     public void acquire()
     {
-        while(isAddingThread.compareAndSet(false, true))
-        {
-            this.arr.add(Thread.currentThread().getId());
-        }
-        isAddingThread.set(false);
 
-        /*if(isLocked.compareAndSet(false , true) == true)
+        while(!tryAcquire())
         {
-            this.pid = Thread.currentThread().getId();
-            this.arr.add(pid);
-        }*/
+            Thread.yield();
+        }
     }
 
-    public boolean tryAcquire() {
-        if(isLocked.compareAndSet(false, true)){
-            acquire();
+    public boolean tryAcquire()
+    {
+        boolean isLockfree = isLocked.compareAndSet(false, true);
+        if(!isLockfree && ownerOfLock == Thread.currentThread())
+        {
+            numOflocks++;
+            return true;
+        }
+        if(isLockfree)
+        {
+            this.ownerOfLock = Thread.currentThread();
+            this.numOflocks=1;
             return true;
         }
         return false;
     }
 
     public void release() {
-        try{
-            
+        try
+        {
+            if(Thread.currentThread() != ownerOfLock) throw new IllegalReleaseAttempt();
+            else if(numOflocks > 1) numOflocks--;
+            else
+            {
+                numOflocks = 0;
+                ownerOfLock = null;
+                isLocked.set(false);
+
+            }
         }
+        catch(IllegalReleaseAttempt e){throw new IllegalReleaseAttempt();}
 
     }
 
-    public void close() {
-
+    public void close()
+    {
+        try{
+            release();
+        }
+        catch(Exception e){throw new IllegalReleaseAttempt();}
     }
 }

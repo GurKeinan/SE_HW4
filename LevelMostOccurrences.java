@@ -8,7 +8,7 @@ public class LevelMostOccurrences {
      * each level with the level before
      * @param node- the root of the tree
      * @param num- the searched number
-     * @return- the index of the level with the most occurrences
+     * @return - the index of the level with the most occurrences
      */
     public static int getLevelWithMostOccurrences(BinNode<Integer> node, int num) {
 

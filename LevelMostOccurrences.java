@@ -28,18 +28,20 @@ public class LevelMostOccurrences {
         // initializing it to 0 or -1 -depends on if the root is num
         q.add(node);
         while(!q.isEmpty()){
-            if(counter + numOfNulls == nextPower2)
+            if(counter + numOfNulls == nextPower2) // check if we reached the next level
             {
+                //modify the variables to the new level
                 counter = 0;
                 nextPower2 *=2;
                 numOfNulls *= 2;
-                if(levelCount > max){
+                if(levelCount > max){ // checking for new max
                     max = levelCount;
                     maxLevel = level;
                 }
                 level++;
                 levelCount = 0;
             }
+            //adding the branches to the queue and checking for num
             BinNode<Integer> t = q.removeFirst();
             if(t.getLeft() != null){
                 q.add(t.getLeft());

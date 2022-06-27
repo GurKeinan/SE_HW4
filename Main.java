@@ -95,10 +95,13 @@ public class Main {
 
         Lock lock = new MyReentrantLock();
         boolean result = lock.tryAcquire();
-        if (result) {
+        if (result)
+        {
             System.out.println("Locked the lock, now releasing it.");
             lock.release();
-        } else {
+        }
+        else
+        {
             System.out.println("You should not reach here!");
         }
     }
